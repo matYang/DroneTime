@@ -145,7 +145,7 @@ class drone:
 		self.flytime = 0
 		self.numOfValues = 0
 		self.precision = 3
-		self.rcData = [1500, 1500, 2000, 1000] #order -> roll, pitch, yaw, throttle
+		self.rcData = [1500, 1500, 1500, 1000] #order -> roll, pitch, yaw, throttle
 	
 		self.loopThread = threading.Thread(target=self.loop)
 		if self.ser.isOpen():
