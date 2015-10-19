@@ -145,7 +145,7 @@ class drone:
 		self.flytime = 0
 		self.numOfValues = 0
 		self.precision = 3
-		self.rcData = [1500, 1500, 1500, 1500] #order -> roll, pitch, yaw, throttle
+		self.rcData = [1500, 1500, 2000, 1000] #order -> roll, pitch, yaw, throttle
 	
 		self.loopThread = threading.Thread(target=self.loop)
 		if self.ser.isOpen():
@@ -244,7 +244,7 @@ class drone:
 			print(str(self.roll) + " " + str(self.pitch) + " " + str(self.yaw) + " " + str(self.throttle))
 
 	def setRC(self):
-		print self.rcData
+		# print self.rcData
 		self.sendData(8, self.CMD2CODE["MSP_SET_RAW_RC"], self.rcData)
 		time.sleep(self.timeMSP)
 		
@@ -252,8 +252,8 @@ class drone:
 		print('success')
 		try:
 			while self.started:
-				self.askRC()
-				time.sleep(.2)
+				#self.askRC()
+				#time.sleep(self.timeMSP)
 				self.setRC()
 
 			self.ser.close()

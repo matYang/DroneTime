@@ -23,11 +23,15 @@ class Main():
 		test = "test"
 		self.board = board
 
-		time.sleep(1)
-		throt = 100
+		init_delay = 6;
+		while init_delay:
+			print("command countdown: " + str(init_delay))
+			time.sleep(1)
+			init_delay = init_delay - 1;
+
 		while 1:
-			throt += 100
-			board.rcData = [1400 + throt % 500, 1200 + throt % 500, 1100 + throt % 500, 1000 + throt % 500]
+			throttle = eval(raw_input("Enter throttle: "))
+			board.rcData = [1500, 1500, 1500, throttle]
 
 
 	def stop(self):
