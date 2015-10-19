@@ -41,6 +41,7 @@ class Main():
 	
 if __name__ == "__main__":
 	global board
+	#canfind wih tail -f /var/log/messages
 	board = multiwii.drone('/dev/tty.usbserial-A8005MO9')
 	
 	start = Main()
