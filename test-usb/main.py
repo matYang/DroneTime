@@ -23,6 +23,7 @@ class Main():
 		test = "test"
 		self.board = board
 
+		#delay for calibration
 		init_delay = 6;
 		while init_delay:
 			print("command countdown: " + str(init_delay))
