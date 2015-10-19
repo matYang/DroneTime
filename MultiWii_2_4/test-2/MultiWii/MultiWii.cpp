@@ -168,6 +168,10 @@ int16_t  sonarAlt;
 int16_t  BaroPID = 0;
 int16_t  errorAltitudeI = 0;
 
+//TODO
+const int16_t throt_kill = 1001;
+int16_t should_arm = 0;
+
 // **************
 // gyro+acc IMU
 // **************
@@ -754,6 +758,10 @@ void setup() {
 
 void go_arm() {
   blinkLED(2,255,1);
+  if (should_arm == 0) {
+    f.ARMED = 0;
+    return;
+  }
 
   if(!f.ARMED) { // arm now!
     f.ARMED = 1;
@@ -856,6 +864,11 @@ void loop () {
     } else rcDelayCommand = 0;
     rcSticks = stTmp;
     
+    //TODO hack kill siwtch, 1001 throttle value toggles board arming
+    if (rcData[THROTTLE] == throt_kill) {
+      should_arm = 1 - should_arm;
+    }
+
     // perform actions    
     if (rcData[THROTTLE] <= MINCHECK) {            // THROTTLE at minimum
       #if !defined(FIXEDWING)
