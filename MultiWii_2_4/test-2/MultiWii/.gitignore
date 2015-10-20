@@ -1,0 +1,7 @@
+build-cli/
+build-cli/*
+./build-cli/*
+
+build-mega-ATmega2560/
+build-mega-ATmega2560/*
+./build-mega-ATmega2560/*
