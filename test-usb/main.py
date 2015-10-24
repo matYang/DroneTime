@@ -50,7 +50,7 @@ if __name__ == "__main__":
 	
 	def signal_handler(signal, frame):
 		print('You pressed Ctrl+C!')
-		board.rcData = [1500, 1500, 1500, throttle]
+		board.rcData = [1500, 1500, 1500, 1000]
 		time.sleep(1)
 		start.stop()
 		time.sleep(1)
