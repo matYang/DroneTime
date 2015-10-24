@@ -31,7 +31,7 @@ class Main():
 			time.sleep(1)
 			init_delay = init_delay - 1;
 
-		while self.marker:
+		while self.marker > 0:
 			throttle = eval(raw_input("Enter throttle: "))
 			board.rcData = [1500, 1500, 1500, throttle]
 
@@ -56,6 +56,7 @@ if __name__ == "__main__":
 		time.sleep(1)
 		start.stop()
 		time.sleep(1)
+		cleanup_stop_thread();
 		sys.exit(0)
 	
 	signal.signal(signal.SIGINT, signal_handler)
