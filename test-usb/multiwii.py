@@ -145,11 +145,11 @@ class drone:
 		self.flytime = 0
 		self.numOfValues = 0
 		self.precision = 3
-		self.rcData = [1500, 1500, 1500, 1000] #order -> roll, pitch, yaw, throttle
+		self.rcData = [1500, 1500, 1500, 1500] #order -> roll, pitch, yaw, throttle
 	
 		self.loopThread = threading.Thread(target=self.loop)
 		if self.ser.isOpen():
-			print("Wait 5 sec for calibrate Multiwii")
+			print("Wait 20 sec for calibrate Multiwii")
 			self.askRC()
 			self.setRC()
 			time.sleep(20)

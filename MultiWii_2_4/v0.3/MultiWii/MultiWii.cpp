@@ -906,7 +906,7 @@ void loop () {
         errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
       #endif
       // @Change
-      if (rcData[THROTTLE] > 1050) {
+      if (rcData[THROTTLE] >= 1050) {
         go_disarm();
       } else {
         go_arm();
