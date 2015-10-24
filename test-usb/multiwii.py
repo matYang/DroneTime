@@ -217,24 +217,24 @@ class drone:
 			msp_hex = response.encode("hex")
 	
 			if msp_hex[10:14] == "":
-				print("roll unavailable")
+				self.roll = -1
 			else:
-				self.roll = float(self.littleEndian(msp_hex[10:14]))
+				self.roll = int(float(self.littleEndian(msp_hex[10:14])))
 	
 			if msp_hex[14:18] == "":
-				print("pitch unavailable")
+				self.pitch = -1
 			else:
-				self.pitch = float(self.littleEndian(msp_hex[14:18]))
+				self.pitch = int(float(self.littleEndian(msp_hex[14:18])))
 	
 			if msp_hex[18:22] == "":
-				print("yaw unavailable")
+				self.yaw = -1
 			else:
-				self.yaw = float(self.littleEndian(msp_hex[18:22]))
+				self.yaw = int(float(self.littleEndian(msp_hex[18:22])))
 	
 			if msp_hex[22:26] == "":
-				print("throttle unavailable")
+				self.throttle = -1
 			else:
-				self.throttle = float(self.littleEndian(msp_hex[22:26]))
+				self.throttle = int(float(self.littleEndian(msp_hex[22:26])))
 				
 			return str(self.roll) + " " + str(self.pitch) + " " + str(self.yaw) + " " + str(self.throttle)
 
@@ -249,57 +249,57 @@ class drone:
 			msp_hex = response.encode("hex")
 	
 			if msp_hex[response_index:response_index+4] == "":
-				print("accx unavailable")
+				self.accx = -1
 			else:
-				self.accx = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.accx = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("accy unavailable")
+				self.accy = -1
 			else:
-				self.accy = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.accy = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("accz unavailable")
+				self.accz = -1
 			else:
-				self.accz = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.accz = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("gyrx unavailable")
+				self.gyrx = -1
 			else:
-				self.gyrx = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.gyrx = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("gyry unavailable")
+				self.gyry = -1
 			else:
-				self.gyry = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.gyry = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("gyrz unavailable")
+				self.gyrz = -1
 			else:
-				self.gyrz = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.gyrz = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("magx unavailable")
+				self.magx = -1
 			else:
-				self.magx = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.magx = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("magy unavailable")
+				self.magy = -1
 			else:
-				self.magy = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.magy = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 			response_index = response_index + 4
 
 			if msp_hex[response_index:response_index+4] == "":
-				print("magz unavailable")
+				self.magz = -1
 			else:
-				self.magz = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				self.magz = int(float(self.littleEndian(msp_hex[response_index:response_index+4])))
 				
 			return str(self.accx) + " " + str(self.accy) + " " + str(self.accz) + " " + str(self.gyrx) + " " + str(self.gyry) + " " + str(self.gyrz) + " " + str(self.magx) + " " + str(self.magy) + " " + str(self.magz)
 
