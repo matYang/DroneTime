@@ -895,7 +895,7 @@ void loop () {
     rcSticks = stTmp;
     
     // perform actions    
-    if (rcData[THROTTLE] <= MINCHECK) {            // THROTTLE at minimum
+    if (rcData[THROTTLE] < MINCHECK) {            // THROTTLE at minimum
       #if !defined(FIXEDWING)
         errorGyroI[ROLL] = 0; errorGyroI[PITCH] = 0;
         #if PID_CONTROLLER == 1
