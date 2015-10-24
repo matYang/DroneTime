@@ -27,7 +27,7 @@ class Main():
 		#delay for calibration
 		init_delay = 5;
 		while init_delay:
-			print("command countdown: " + str(init_delay))
+			# print("command countdown: " + str(init_delay))
 			time.sleep(1)
 			init_delay = init_delay - 1;
 

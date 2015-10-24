@@ -132,12 +132,12 @@ class drone:
 		self.m3 = 0
 		self.m4 = 0
 		self.message = ""
-		self.ax = 0
-		selfay = 0
-		self.az = 0
-		self.gx = 0
-		self.gy = 0
-		self.gz = 0
+		self.accx = 0
+		self.accy = 0
+		self.accz = 0
+		self.gyrx = 0
+		self.gyry = 0
+		self.gyrz = 0
 		self.magx = 0
 		self.magy = 0
 		self.magz = 0
@@ -212,36 +212,100 @@ class drone:
 		time.sleep(self.timeMSP)
 		response = self.ser.readline()
 		if str(response) == "":
-			print("fuck?")
+			print("RC data not available")
 			return
 		else:
 			msp_hex = response.encode("hex")
 	
 			if msp_hex[10:14] == "":
 				print("roll unavailable")
-				
 			else:
 				self.roll = float(self.littleEndian(msp_hex[10:14]))
 	
 			if msp_hex[14:18] == "":
 				print("pitch unavailable")
-				
 			else:
 				self.pitch = float(self.littleEndian(msp_hex[14:18]))
 	
 			if msp_hex[18:22] == "":
 				print("yaw unavailable")
-				
 			else:
 				self.yaw = float(self.littleEndian(msp_hex[18:22]))
 	
 			if msp_hex[22:26] == "":
 				print("throttle unavailable")
-				
 			else:
 				self.throttle = float(self.littleEndian(msp_hex[22:26]))
 				
 			print(str(self.roll) + " " + str(self.pitch) + " " + str(self.yaw) + " " + str(self.throttle))
+
+	def askIMU(self):
+		self.ser.write(self.MSP_RAW_IMU)
+		time.sleep(self.timeMSP)
+		response = self.ser.readline()
+		response_index = 10
+		if str(response) == "":
+			print("IMU data not available")
+			return
+		else:
+			msp_hex = response.encode("hex")
+			print(msp_hex)
+	
+			if msp_hex[response_index:response_index+4] == "":
+				print("accx unavailable")
+			else:
+				self.accx = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("accy unavailable")
+			else:
+				self.accy = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("accz unavailable")
+			else:
+				self.accz = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("gyrx unavailable")
+			else:
+				self.gyrx = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("gyry unavailable")
+			else:
+				self.gyry = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("gyrz unavailable")
+			else:
+				self.gyrz = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("magx unavailable")
+			else:
+				self.magx = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("magy unavailable")
+			else:
+				self.magy = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+			response_index = response_index + 4
+
+			if msp_hex[response_index:response_index+4] == "":
+				print("magz unavailable")
+			else:
+				self.magz = float(self.littleEndian(msp_hex[response_index:response_index+4]))
+				
+			print(str(self.accx) + " " + str(self.accy) + " " + str(self.accz) + " " + str(self.gyrx) + " " + str(self.gyry) + " " + str(self.gyrz) + " " + str(self.magx) + " " + str(self.magy) + " " + str(self.magz))
+
 
 	def setRC(self):
 		# print self.rcData
@@ -252,8 +316,9 @@ class drone:
 		print('success')
 		try:
 			while self.started:
-				#self.askRC()
-				#time.sleep(self.timeMSP)
+				self.askRC()
+				self.askIMU()
+				time.sleep(self.timeMSP)
 				self.setRC()
 
 			self.ser.close()
