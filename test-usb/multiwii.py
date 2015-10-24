@@ -257,7 +257,6 @@ class drone:
 				self.setRC()
 
 			self.ser.close()
-			file.close()
 		
 		except Exception,e1:	# Catches any errors in the serial communication
 			print("Error on main: "+str(e1))
