@@ -24,7 +24,7 @@ class Main():
 		self.board = board
 
 		#delay for calibration
-		init_delay = 6;
+		init_delay = 25;
 		while init_delay:
 			print("command countdown: " + str(init_delay))
 			time.sleep(1)

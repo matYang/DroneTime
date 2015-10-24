@@ -152,7 +152,7 @@ class drone:
 			print("Wait 5 sec for calibrate Multiwii")
 			self.askRC()
 			self.setRC()
-			time.sleep(5)
+			time.sleep(20)
 			self.loopThread.start()
 
 	def stop(self):
