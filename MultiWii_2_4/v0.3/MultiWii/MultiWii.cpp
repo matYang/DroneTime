@@ -763,7 +763,9 @@ void go_arm() {
     && (f.GPS_FIX && GPS_numSat >= 5)
   #endif
     ) {
-    if(!f.ARMED && !f.BARO_MODE) { // arm now!
+    // @Change
+    //if(!f.ARMED && !f.BARO_MODE) { // arm now!
+    if(!f.ARMED) { // arm now!
       f.ARMED = 1;
       #if defined(HEADFREE)
         headFreeModeHold = att.heading;
@@ -860,22 +862,23 @@ void loop () {
     rcTime = currentTime + 20000;
     computeRC();
     // Failsafe routine - added by MIS
-    #if defined(FAILSAFE)
-      if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
-        for(i=0; i<3; i++) rcData[i] = MIDRC;                               // after specified guard time after RC signal is lost (in 0.1sec)
-        rcData[THROTTLE] = conf.failsafe_throttle;
-        if (failsafeCnt > 5*(FAILSAFE_DELAY+FAILSAFE_OFF_DELAY)) {          // Turn OFF motors after specified Time (in 0.1sec)
-          go_disarm();     // This will prevent the copter to automatically rearm if failsafe shuts it down and prevents
-          f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
-        }
-        failsafeEvents++;
-      }
-      if ( failsafeCnt > (5*FAILSAFE_DELAY) && !f.ARMED) {  //Turn of "Ok To arm to prevent the motors from spinning after repowering the RX with low throttle and aux to arm
-          go_disarm();     // This will prevent the copter to automatically rearm if failsafe shuts it down and prevents
-          f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
-      }
-      failsafeCnt++;
-    #endif
+    // @Change
+    // #if defined(FAILSAFE)
+    //   if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
+    //     for(i=0; i<3; i++) rcData[i] = MIDRC;                               // after specified guard time after RC signal is lost (in 0.1sec)
+    //     rcData[THROTTLE] = conf.failsafe_throttle;
+    //     if (failsafeCnt > 5*(FAILSAFE_DELAY+FAILSAFE_OFF_DELAY)) {          // Turn OFF motors after specified Time (in 0.1sec)
+    //       go_disarm();     // This will prevent the copter to automatically rearm if failsafe shuts it down and prevents
+    //       f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
+    //     }
+    //     failsafeEvents++;
+    //   }
+    //   if ( failsafeCnt > (5*FAILSAFE_DELAY) && !f.ARMED) {  //Turn of "Ok To arm to prevent the motors from spinning after repowering the RX with low throttle and aux to arm
+    //       go_disarm();     // This will prevent the copter to automatically rearm if failsafe shuts it down and prevents
+    //       f.OK_TO_ARM = 0; // to restart accidentely by just reconnect to the tx - you will have to switch off first to rearm
+    //   }
+    //   failsafeCnt++;
+    // #endif
     // end of failsafe routine - next change is made with RcOptions setting
 
     // ------------------ STICKS COMMAND HANDLER --------------------
@@ -902,18 +905,25 @@ void loop () {
         #endif
         errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
       #endif
-      if (conf.activate[BOXARM] > 0) {             // Arming/Disarming via ARM BOX
-        if ( rcOptions[BOXARM] && f.OK_TO_ARM ) go_arm(); else if (f.ARMED) go_disarm();
+      // @Change
+      if (rcData[THROTTLE] > 1050) {
+        go_disarm();
+      } else {
+        go_arm();
       }
+      // if (conf.activate[BOXARM] > 0) {             // Arming/Disarming via ARM BOX
+      //   if ( rcOptions[BOXARM] && f.OK_TO_ARM ) go_arm(); else if (f.ARMED) go_disarm();
+      // }
     }
     if(rcDelayCommand == 20) {
       if(f.ARMED) {                   // actions during armed
-        #ifdef ALLOW_ARM_DISARM_VIA_TX_YAW
-          if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_LO + PIT_CE + ROL_CE) go_disarm();    // Disarm via YAW
-        #endif
-        #ifdef ALLOW_ARM_DISARM_VIA_TX_ROLL
-          if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_CE + PIT_CE + ROL_LO) go_disarm();    // Disarm via ROLL
-        #endif
+        // @Change
+        // #ifdef ALLOW_ARM_DISARM_VIA_TX_YAW
+        //   if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_LO + PIT_CE + ROL_CE) go_disarm();    // Disarm via YAW
+        // #endif
+        // #ifdef ALLOW_ARM_DISARM_VIA_TX_ROLL
+        //   if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_CE + PIT_CE + ROL_LO) go_disarm();    // Disarm via ROLL
+        // #endif
       } else {                        // actions during not armed
         i=0;
         if (rcSticks == THR_LO + YAW_LO + PIT_LO + ROL_CE) {    // GYRO calibration
@@ -957,12 +967,13 @@ void loop () {
           #endif
           previousTime = micros();
         }
-        #ifdef ALLOW_ARM_DISARM_VIA_TX_YAW
-          else if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_HI + PIT_CE + ROL_CE) go_arm();      // Arm via YAW
-        #endif
-        #ifdef ALLOW_ARM_DISARM_VIA_TX_ROLL
-          else if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_CE + PIT_CE + ROL_HI) go_arm();      // Arm via ROLL
-        #endif
+        // @Change
+        // #ifdef ALLOW_ARM_DISARM_VIA_TX_YAW
+        //   else if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_HI + PIT_CE + ROL_CE) go_arm();      // Arm via YAW
+        // #endif
+        // #ifdef ALLOW_ARM_DISARM_VIA_TX_ROLL
+        //   else if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_CE + PIT_CE + ROL_HI) go_arm();      // Arm via ROLL
+        // #endif
         #ifdef LCD_TELEMETRY_AUTO
           else if (rcSticks == THR_LO + YAW_CE + PIT_HI + ROL_LO) {              // Auto telemetry ON/OFF
             if (telemetry_auto) {
@@ -1055,6 +1066,8 @@ void loop () {
         }
         f.ANGLE_MODE = 0;
       }
+      //@Change
+      rcOptions[BOXHORIZON] = 1;
       if ( rcOptions[BOXHORIZON] ) {
         f.ANGLE_MODE = 0;
         if (!f.HORIZON_MODE) {
