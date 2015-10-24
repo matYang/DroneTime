@@ -22,6 +22,7 @@ class Main():
 		self.hello = "hello"
 		test = "test"
 		self.board = board
+		self.marker = 1
 
 		#delay for calibration
 		init_delay = 5;
@@ -30,12 +31,13 @@ class Main():
 			time.sleep(1)
 			init_delay = init_delay - 1;
 
-		while 1:
+		while self.marker:
 			throttle = eval(raw_input("Enter throttle: "))
 			board.rcData = [1500, 1500, 1500, throttle]
 
 
 	def stop(self):
+		self.marker = 0
 		self.board.stop()
 
 	
