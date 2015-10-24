@@ -895,7 +895,7 @@ void loop () {
     rcSticks = stTmp;
     
     // perform actions    
-    if (rcData[THROTTLE] < MINCHECK) {            // THROTTLE at minimum
+    if (rcData[THROTTLE] <= MINCHECK) {            // THROTTLE at minimum
       #if !defined(FIXEDWING)
         errorGyroI[ROLL] = 0; errorGyroI[PITCH] = 0;
         #if PID_CONTROLLER == 1
@@ -906,7 +906,7 @@ void loop () {
         errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
       #endif
       // @Change
-      if (rcData[THROTTLE] >= 1050) {
+      if (rcData[THROTTLE] < 1020) {
         go_disarm();
       } else {
         go_arm();
