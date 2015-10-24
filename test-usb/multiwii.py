@@ -317,6 +317,7 @@ class drone:
 		try:
 			while self.started:
 				self.askRC()
+				time.sleep(self.timeMSP)
 				self.askIMU()
 				time.sleep(self.timeMSP)
 				self.setRC()
