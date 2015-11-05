@@ -306,6 +306,8 @@ class drone:
 
 	def setRC(self):
 		# print self.rcData
+		if self.rcData[3] > 1500:
+			self.rcData[3] = 1500
 		self.sendData(8, self.CMD2CODE["MSP_SET_RAW_RC"], self.rcData)
 		time.sleep(self.timeMSP)
 		
