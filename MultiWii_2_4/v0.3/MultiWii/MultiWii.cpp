@@ -682,9 +682,9 @@ void setup() {
   readEEPROM();                                 // load setting data from last used profile
   blinkLED(2,40,global_conf.currentSet+1);          
 
-  #if GPS
-    recallGPSconf();                              //Load GPS configuration parameteres
-  #endif
+  // #if GPS
+  //   recallGPSconf();                              //Load GPS configuration parameteres
+  // #endif
 
   configureReceiver();
   #if defined (PILOTLAMP) 
@@ -694,9 +694,9 @@ void setup() {
     initOpenLRS();
   #endif
   initSensors();
-  #if GPS
-    GPS_set_pids();
-  #endif
+  // #if GPS
+  //   GPS_set_pids();
+  // #endif
   previousTime = micros();
   #if defined(GIMBAL)
    calibratingA = 512;
@@ -707,32 +707,32 @@ void setup() {
     for(uint8_t j=0; j<=PMOTOR_SUM; j++) pMeter[j]=0;
   #endif
   /************************************/
-  #if GPS
-    #if defined(GPS_SERIAL)
-      GPS_SerialInit();
-    #endif
-    GPS_conf.max_wp_number = getMaxWPNumber(); 
-  #endif
+  // #if GPS
+  //   #if defined(GPS_SERIAL)
+  //     GPS_SerialInit();
+  //   #endif
+  //   GPS_conf.max_wp_number = getMaxWPNumber(); 
+  // #endif
   
-  #if defined(LCD_ETPP) || defined(LCD_LCD03) || defined(LCD_LCD03S) || defined(OLED_I2C_128x64) || defined(OLED_DIGOLE) || defined(LCD_TELEMETRY_STEP)
-    initLCD();
-  #endif
-  #ifdef LCD_TELEMETRY_DEBUG
-    telemetry_auto = 1;
-  #endif
-  #ifdef LCD_CONF_DEBUG
-    configurationLoop();
-  #endif
-  #ifdef LANDING_LIGHTS_DDR
-    init_landing_lights();
-  #endif
+  // #if defined(LCD_ETPP) || defined(LCD_LCD03) || defined(LCD_LCD03S) || defined(OLED_I2C_128x64) || defined(OLED_DIGOLE) || defined(LCD_TELEMETRY_STEP)
+  //   initLCD();
+  // #endif
+  // #ifdef LCD_TELEMETRY_DEBUG
+  //   telemetry_auto = 1;
+  // #endif
+  // #ifdef LCD_CONF_DEBUG
+  //   configurationLoop();
+  // #endif
+  // #ifdef LANDING_LIGHTS_DDR
+  //   init_landing_lights();
+  // #endif
   #ifdef FASTER_ANALOG_READS
     ADCSRA |= _BV(ADPS2) ; ADCSRA &= ~_BV(ADPS1); ADCSRA &= ~_BV(ADPS0); // this speeds up analogRead without loosing too much resolution: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1208715493/11
   #endif
-  #if defined(LED_FLASHER)
-    init_led_flasher();
-    led_flasher_set_sequence(LED_FLASHER_SEQUENCE);
-  #endif
+  // #if defined(LED_FLASHER)
+  //   init_led_flasher();
+  //   led_flasher_set_sequence(LED_FLASHER_SEQUENCE);
+  // #endif
   f.SMALL_ANGLES_25=1; // important for gyro only conf
   #ifdef LOG_PERMANENT
     // read last stored set
@@ -753,15 +753,15 @@ void setup() {
 
 void go_arm() {
   if(calibratingG == 0
-  #if defined(ONLYARMWHENFLAT)
-    && f.ACC_CALIBRATED 
-  #endif
-  #if defined(FAILSAFE)
-    && failsafeCnt < 2
-  #endif
-  #if GPS && defined(ONLY_ALLOW_ARM_WITH_GPS_3DFIX)
-    && (f.GPS_FIX && GPS_numSat >= 5)
-  #endif
+  // #if defined(ONLYARMWHENFLAT)
+  //   && f.ACC_CALIBRATED 
+  // #endif
+  // #if defined(FAILSAFE)
+  //   && failsafeCnt < 2
+  // #endif
+  // #if GPS && defined(ONLY_ALLOW_ARM_WITH_GPS_3DFIX)
+  //   && (f.GPS_FIX && GPS_numSat >= 5)
+  // #endif
     ) {
     // @Change
     //if(!f.ARMED && !f.BARO_MODE) { // arm now!
@@ -774,31 +774,31 @@ void go_arm() {
       #if defined(VBAT)
         if (analog.vbat > NO_VBAT) vbatMin = analog.vbat;
       #endif
-      #ifdef ALTITUDE_RESET_ON_ARM
-        #if BARO
-          calibratingB = 10; // calibrate baro to new ground level (10 * 25 ms = ~250 ms non blocking)
-        #endif
-      #endif
-      #ifdef LCD_TELEMETRY // reset some values when arming
-        #if BARO
-          BAROaltMax = alt.EstAlt;
-        #endif
-        #if GPS
-          GPS_speedMax = 0;
-        #endif
-        #if defined( POWERMETER_HARD ) && (defined(LOG_VALUES) || defined(LCD_TELEMETRY))
-          powerValueMaxMAH = 0;
-        #endif
-        #ifdef WATTS
-          wattsMax = 0;
-        #endif
-      #endif
-      #ifdef LOG_PERMANENT
-        plog.arm++;           // #arm events
-        plog.running = 1;       // toggle on arm & disarm to monitor for clean shutdown vs. powercut
-        // write now.
-        writePLog();
-      #endif
+      // #ifdef ALTITUDE_RESET_ON_ARM
+      //   #if BARO
+      //     calibratingB = 10; // calibrate baro to new ground level (10 * 25 ms = ~250 ms non blocking)
+      //   #endif
+      // #endif
+      // #ifdef LCD_TELEMETRY // reset some values when arming
+      //   #if BARO
+      //     BAROaltMax = alt.EstAlt;
+      //   #endif
+      //   #if GPS
+      //     GPS_speedMax = 0;
+      //   #endif
+      //   #if defined( POWERMETER_HARD ) && (defined(LOG_VALUES) || defined(LCD_TELEMETRY))
+      //     powerValueMaxMAH = 0;
+      //   #endif
+      //   #ifdef WATTS
+      //     wattsMax = 0;
+      //   #endif
+      // #endif
+      // #ifdef LOG_PERMANENT
+      //   plog.arm++;           // #arm events
+      //   plog.running = 1;       // toggle on arm & disarm to monitor for clean shutdown vs. powercut
+      //   // write now.
+      //   writePLog();
+      // #endif
     }
   } else if(!f.ARMED) { 
     blinkLED(2,255,1);
@@ -808,15 +808,15 @@ void go_arm() {
 void go_disarm() {
   if (f.ARMED) {
     f.ARMED = 0;
-    #ifdef LOG_PERMANENT
-      plog.disarm++;        // #disarm events
-      plog.armed_time = armedTime ;   // lifetime in seconds
-      if (failsafeEvents) plog.failsafe++;      // #acitve failsafe @ disarm
-      if (i2c_errors_count > 10) plog.i2c++;           // #i2c errs @ disarm
-      plog.running = 0;       // toggle @ arm & disarm to monitor for clean shutdown vs. powercut
-      // write now.
-      writePLog();
-    #endif
+    // #ifdef LOG_PERMANENT
+    //   plog.disarm++;        // #disarm events
+    //   plog.armed_time = armedTime ;   // lifetime in seconds
+    //   if (failsafeEvents) plog.failsafe++;      // #acitve failsafe @ disarm
+    //   if (i2c_errors_count > 10) plog.i2c++;           // #i2c errs @ disarm
+    //   plog.running = 0;       // toggle @ arm & disarm to monitor for clean shutdown vs. powercut
+    //   // write now.
+    //   writePLog();
+    // #endif
   }
 }
 
@@ -834,12 +834,13 @@ void loop () {
   static int32_t errorGyroI_YAW;
   static int16_t delta1[2],delta2[2];
   static int16_t errorGyroI[2] = {0,0};
-  #elif PID_CONTROLLER == 2
-  static int16_t delta1[3],delta2[3];
-  static int32_t errorGyroI[3] = {0,0,0};
-  static int16_t lastError[3] = {0,0,0};
-  int16_t deltaSum;
-  int16_t AngleRateTmp, RateError;
+  // @Change
+  // #elif PID_CONTROLLER == 2
+  // static int16_t delta1[3],delta2[3];
+  // static int32_t errorGyroI[3] = {0,0,0};
+  // static int16_t lastError[3] = {0,0,0};
+  // int16_t deltaSum;
+  // int16_t AngleRateTmp, RateError;
   #endif
   static uint16_t rcTime  = 0;
   static int16_t initialThrottleHold;
@@ -853,13 +854,14 @@ void loop () {
     Read_OpenLRS_RC();
   #endif 
 
-  #if defined(SERIAL_RX)
-  if ((spekFrameDone == 0x01) || ((int16_t)(currentTime-rcTime) >0 )) { 
-    spekFrameDone = 0x00;
-  #else
-  if ((int16_t)(currentTime-rcTime) >0 ) { // 50Hz
-  #endif
-    rcTime = currentTime + 20000;
+  //#if defined(SERIAL_RX)
+  //if ((spekFrameDone == 0x01) || ((int16_t)(currentTime-rcTime) >0 )) { 
+  //  spekFrameDone = 0x00;
+  //#else
+  if ((int16_t)(currentTime-rcTime) >0 ) { // 100Hz
+  //#endif
+    //@Change
+    rcTime = currentTime + 10000;
     computeRC();
     // Failsafe routine - added by MIS
     // @Change
@@ -889,20 +891,20 @@ void loop () {
       if(rcData[i] > MINCHECK) stTmp |= 0x80;      // check for MIN
       if(rcData[i] < MAXCHECK) stTmp |= 0x40;      // check for MAX
     }
-    if(stTmp == rcSticks) {
-      if(rcDelayCommand<250) rcDelayCommand++;
-    } else rcDelayCommand = 0;
+    // if(stTmp == rcSticks) {
+    //   if(rcDelayCommand<250) rcDelayCommand++;
+    // } else rcDelayCommand = 0;
     rcSticks = stTmp;
     
     // perform actions    
     if (rcData[THROTTLE] <= MINCHECK) {            // THROTTLE at minimum
       #if !defined(FIXEDWING)
         errorGyroI[ROLL] = 0; errorGyroI[PITCH] = 0;
-        #if PID_CONTROLLER == 1
+        //#if PID_CONTROLLER == 1
           errorGyroI_YAW = 0;
-        #elif PID_CONTROLLER == 2
-          errorGyroI[YAW] = 0;
-        #endif
+        // #elif PID_CONTROLLER == 2
+        //   errorGyroI[YAW] = 0;
+        // #endif
         errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
       #endif
       // @Change
@@ -915,8 +917,8 @@ void loop () {
       //   if ( rcOptions[BOXARM] && f.OK_TO_ARM ) go_arm(); else if (f.ARMED) go_disarm();
       // }
     }
-    if(rcDelayCommand == 20) {
-      if(f.ARMED) {                   // actions during armed
+    //if(rcDelayCommand == 20) {
+      //if(f.ARMED) {                   // actions during armed
         // @Change
         // #ifdef ALLOW_ARM_DISARM_VIA_TX_YAW
         //   if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_LO + PIT_CE + ROL_CE) go_disarm();    // Disarm via YAW
@@ -924,148 +926,149 @@ void loop () {
         // #ifdef ALLOW_ARM_DISARM_VIA_TX_ROLL
         //   if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_CE + PIT_CE + ROL_LO) go_disarm();    // Disarm via ROLL
         // #endif
-      } else {                        // actions during not armed
-        i=0;
-        if (rcSticks == THR_LO + YAW_LO + PIT_LO + ROL_CE) {    // GYRO calibration
-          calibratingG=512;
-          #if GPS 
-            GPS_reset_home_position();
-          #endif
-          #if BARO
-            calibratingB=10;  // calibrate baro to new ground level (10 * 25 ms = ~250 ms non blocking)
-          #endif
-        }
-        #if defined(INFLIGHT_ACC_CALIBRATION)  
-         else if (rcSticks == THR_LO + YAW_LO + PIT_HI + ROL_HI) {    // Inflight ACC calibration START/STOP
-            if (AccInflightCalibrationMeasurementDone){                // trigger saving into eeprom after landing
-              AccInflightCalibrationMeasurementDone = 0;
-              AccInflightCalibrationSavetoEEProm = 1;
-            }else{ 
-              AccInflightCalibrationArmed = !AccInflightCalibrationArmed; 
-              #if defined(BUZZER)
-                if (AccInflightCalibrationArmed) SET_ALARM_BUZZER(ALRM_FAC_TOGGLE, ALRM_LVL_TOGGLE_2);
-                else     SET_ALARM_BUZZER(ALRM_FAC_TOGGLE, ALRM_LVL_TOGGLE_ELSE);
-              #endif
-            }
-         } 
-        #endif
-        #ifdef MULTIPLE_CONFIGURATION_PROFILES
-          if      (rcSticks == THR_LO + YAW_LO + PIT_CE + ROL_LO) i=1;    // ROLL left  -> Profile 1
-          else if (rcSticks == THR_LO + YAW_LO + PIT_HI + ROL_CE) i=2;    // PITCH up   -> Profile 2
-          else if (rcSticks == THR_LO + YAW_LO + PIT_CE + ROL_HI) i=3;    // ROLL right -> Profile 3
-          if(i) {
-            global_conf.currentSet = i-1;
-            writeGlobalSet(0);
-            readEEPROM();
-            blinkLED(2,40,i);
-            SET_ALARM(ALRM_FAC_TOGGLE, i);
-          }
-        #endif
-        if (rcSticks == THR_LO + YAW_HI + PIT_HI + ROL_CE) {            // Enter LCD config
-          #if defined(LCD_CONF)
-            configurationLoop(); // beginning LCD configuration
-          #endif
-          previousTime = micros();
-        }
-        // @Change
+      //} else {                        // actions during not armed
+      //  i=0;
+        //only calibrate at drone start is good enough
+        //if (rcSticks == THR_LO + YAW_LO + PIT_LO + ROL_CE) {    // GYRO calibration
+          //calibratingG=512;
+          // #if GPS 
+          //   GPS_reset_home_position();
+          // #endif
+          //#if BARO
+          //  calibratingB=10;  // calibrate baro to new ground level (10 * 25 ms = ~250 ms non blocking)
+          //#endif
+        //}
+        //@Change
+        // #if defined(INFLIGHT_ACC_CALIBRATION)  
+        //  else if (rcSticks == THR_LO + YAW_LO + PIT_HI + ROL_HI) {    // Inflight ACC calibration START/STOP
+        //     if (AccInflightCalibrationMeasurementDone){                // trigger saving into eeprom after landing
+        //       AccInflightCalibrationMeasurementDone = 0;
+        //       AccInflightCalibrationSavetoEEProm = 1;
+        //     }else{ 
+        //       AccInflightCalibrationArmed = !AccInflightCalibrationArmed; 
+        //       #if defined(BUZZER)
+        //         if (AccInflightCalibrationArmed) SET_ALARM_BUZZER(ALRM_FAC_TOGGLE, ALRM_LVL_TOGGLE_2);
+        //         else     SET_ALARM_BUZZER(ALRM_FAC_TOGGLE, ALRM_LVL_TOGGLE_ELSE);
+        //       #endif
+        //     }
+        //  } 
+        // #endif
+        // #ifdef MULTIPLE_CONFIGURATION_PROFILES
+        //   if      (rcSticks == THR_LO + YAW_LO + PIT_CE + ROL_LO) i=1;    // ROLL left  -> Profile 1
+        //   else if (rcSticks == THR_LO + YAW_LO + PIT_HI + ROL_CE) i=2;    // PITCH up   -> Profile 2
+        //   else if (rcSticks == THR_LO + YAW_LO + PIT_CE + ROL_HI) i=3;    // ROLL right -> Profile 3
+        //   if(i) {
+        //     global_conf.currentSet = i-1;
+        //     writeGlobalSet(0);
+        //     readEEPROM();
+        //     blinkLED(2,40,i);
+        //     SET_ALARM(ALRM_FAC_TOGGLE, i);
+        //   }
+        // #endif
+        // if (rcSticks == THR_LO + YAW_HI + PIT_HI + ROL_CE) {            // Enter LCD config
+        //   #if defined(LCD_CONF)
+        //     configurationLoop(); // beginning LCD configuration
+        //   #endif
+        //   previousTime = micros();
+        // }
         // #ifdef ALLOW_ARM_DISARM_VIA_TX_YAW
         //   else if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_HI + PIT_CE + ROL_CE) go_arm();      // Arm via YAW
         // #endif
         // #ifdef ALLOW_ARM_DISARM_VIA_TX_ROLL
         //   else if (conf.activate[BOXARM] == 0 && rcSticks == THR_LO + YAW_CE + PIT_CE + ROL_HI) go_arm();      // Arm via ROLL
         // #endif
-        #ifdef LCD_TELEMETRY_AUTO
-          else if (rcSticks == THR_LO + YAW_CE + PIT_HI + ROL_LO) {              // Auto telemetry ON/OFF
-            if (telemetry_auto) {
-              telemetry_auto = 0;
-              telemetry = 0;
-            } else
-              telemetry_auto = 1;
-          }
-        #endif
-        #ifdef LCD_TELEMETRY_STEP
-          else if (rcSticks == THR_LO + YAW_CE + PIT_HI + ROL_HI) {              // Telemetry next step
-            telemetry = telemetryStepSequence[++telemetryStepIndex % strlen(telemetryStepSequence)];
-            #if defined( OLED_I2C_128x64)
-              if (telemetry != 0) i2c_OLED_init();
-            #elif defined(OLED_DIGOLE)
-              if (telemetry != 0) i2c_OLED_DIGOLE_init();
-            #endif
-            LCDclear();
-          }
-        #endif
-        #if ACC
-          else if (rcSticks == THR_HI + YAW_LO + PIT_LO + ROL_CE) calibratingA=512;     // throttle=max, yaw=left, pitch=min
-        #endif
-        #if MAG
-          else if (rcSticks == THR_HI + YAW_HI + PIT_LO + ROL_CE) f.CALIBRATE_MAG = 1;  // throttle=max, yaw=right, pitch=min
-        #endif
-        i=0;
-        if      (rcSticks == THR_HI + YAW_CE + PIT_HI + ROL_CE) {conf.angleTrim[PITCH]+=2; i=1;}
-        else if (rcSticks == THR_HI + YAW_CE + PIT_LO + ROL_CE) {conf.angleTrim[PITCH]-=2; i=1;}
-        else if (rcSticks == THR_HI + YAW_CE + PIT_CE + ROL_HI) {conf.angleTrim[ROLL] +=2; i=1;}
-        else if (rcSticks == THR_HI + YAW_CE + PIT_CE + ROL_LO) {conf.angleTrim[ROLL] -=2; i=1;}
-        if (i) {
-          writeParams(1);
-          rcDelayCommand = 0;    // allow autorepetition
-          #if defined(LED_RING)
-            blinkLedRing();
-          #endif
-        }
-      }
-    }
-    #if defined(LED_FLASHER)
-      led_flasher_autoselect_sequence();
-    #endif
-    
-    #if defined(INFLIGHT_ACC_CALIBRATION)
-      if (AccInflightCalibrationArmed && f.ARMED && rcData[THROTTLE] > MINCHECK && !rcOptions[BOXARM] ){ // Copter is airborne and you are turning it off via boxarm : start measurement
-        InflightcalibratingA = 50;
-        AccInflightCalibrationArmed = 0;
-      }  
-      if (rcOptions[BOXCALIB]) {      // Use the Calib Option to activate : Calib = TRUE Meausrement started, Land and Calib = 0 measurement stored
-        if (!AccInflightCalibrationActive && !AccInflightCalibrationMeasurementDone){
-          InflightcalibratingA = 50;
-        }
-      }else if(AccInflightCalibrationMeasurementDone && !f.ARMED){
-        AccInflightCalibrationMeasurementDone = 0;
-        AccInflightCalibrationSavetoEEProm = 1;
-      }
-    #endif
+        // #ifdef LCD_TELEMETRY_AUTO
+        //   else if (rcSticks == THR_LO + YAW_CE + PIT_HI + ROL_LO) {              // Auto telemetry ON/OFF
+        //     if (telemetry_auto) {
+        //       telemetry_auto = 0;
+        //       telemetry = 0;
+        //     } else
+        //       telemetry_auto = 1;
+        //   }
+        // #endif
+        // #ifdef LCD_TELEMETRY_STEP
+        //   else if (rcSticks == THR_LO + YAW_CE + PIT_HI + ROL_HI) {              // Telemetry next step
+        //     telemetry = telemetryStepSequence[++telemetryStepIndex % strlen(telemetryStepSequence)];
+        //     #if defined( OLED_I2C_128x64)
+        //       if (telemetry != 0) i2c_OLED_init();
+        //     #elif defined(OLED_DIGOLE)
+        //       if (telemetry != 0) i2c_OLED_DIGOLE_init();
+        //     #endif
+        //     LCDclear();
+        //   }
+        // #endif
+        //#if ACC
+        //  calibratingA=512;     // throttle=max, yaw=left, pitch=min
+        //#endif
+        //#if MAG
+        //  f.CALIBRATE_MAG = 1;  // throttle=max, yaw=right, pitch=min
+        //#endif
+        // i=0;
+        // if      (rcSticks == THR_HI + YAW_CE + PIT_HI + ROL_CE) {conf.angleTrim[PITCH]+=2; i=1;}
+        // else if (rcSticks == THR_HI + YAW_CE + PIT_LO + ROL_CE) {conf.angleTrim[PITCH]-=2; i=1;}
+        // else if (rcSticks == THR_HI + YAW_CE + PIT_CE + ROL_HI) {conf.angleTrim[ROLL] +=2; i=1;}
+        // else if (rcSticks == THR_HI + YAW_CE + PIT_CE + ROL_LO) {conf.angleTrim[ROLL] -=2; i=1;}
+        // if (i) {
+        //   writeParams(1);
+        //   rcDelayCommand = 0;    // allow autorepetition
+        // }
+      //}
+    //}
 
-    #if defined(EXTENDED_AUX_STATES)
-    uint32_t auxState = 0;
-    for(i=0;i<4;i++)
-      auxState |=
-      (uint32_t)(rcData[AUX1+i]<1230)<<(6*i) | 
-      (uint32_t)(1231<rcData[AUX1+i] && rcData[AUX1+i]<1360)<<(6*i+1) |
-      (uint32_t)(1361<rcData[AUX1+i] && rcData[AUX1+i]<1490)<<(6*i+2) |
-      (uint32_t)(1491<rcData[AUX1+i] && rcData[AUX1+i]<1620)<<(6*i+3) |
-      (uint32_t)(1621<rcData[AUX1+i] && rcData[AUX1+i]<1749)<<(6*i+4) |
-      (uint32_t)(rcData[AUX1+i]>1750)<<(6*i+5);
-    #else
+    //@Change
+    // #if defined(LED_FLASHER)
+    //   led_flasher_autoselect_sequence();
+    // #endif
+    
+    // #if defined(INFLIGHT_ACC_CALIBRATION)
+    //   if (AccInflightCalibrationArmed && f.ARMED && rcData[THROTTLE] > MINCHECK && !rcOptions[BOXARM] ){ // Copter is airborne and you are turning it off via boxarm : start measurement
+    //     InflightcalibratingA = 50;
+    //     AccInflightCalibrationArmed = 0;
+    //   }  
+    //   if (rcOptions[BOXCALIB]) {      // Use the Calib Option to activate : Calib = TRUE Meausrement started, Land and Calib = 0 measurement stored
+    //     if (!AccInflightCalibrationActive && !AccInflightCalibrationMeasurementDone){
+    //       InflightcalibratingA = 50;
+    //     }
+    //   }else if(AccInflightCalibrationMeasurementDone && !f.ARMED){
+    //     AccInflightCalibrationMeasurementDone = 0;
+    //     AccInflightCalibrationSavetoEEProm = 1;
+    //   }
+    // #endif
+
+    // #if defined(EXTENDED_AUX_STATES)
+    // uint32_t auxState = 0;
+    // for(i=0;i<4;i++)
+    //   auxState |=
+    //   (uint32_t)(rcData[AUX1+i]<1230)<<(6*i) | 
+    //   (uint32_t)(1231<rcData[AUX1+i] && rcData[AUX1+i]<1360)<<(6*i+1) |
+    //   (uint32_t)(1361<rcData[AUX1+i] && rcData[AUX1+i]<1490)<<(6*i+2) |
+    //   (uint32_t)(1491<rcData[AUX1+i] && rcData[AUX1+i]<1620)<<(6*i+3) |
+    //   (uint32_t)(1621<rcData[AUX1+i] && rcData[AUX1+i]<1749)<<(6*i+4) |
+    //   (uint32_t)(rcData[AUX1+i]>1750)<<(6*i+5);
+    // #else
     uint16_t auxState = 0;
     for(i=0;i<4;i++)
       auxState |= (rcData[AUX1+i]<1300)<<(3*i) | (1300<rcData[AUX1+i] && rcData[AUX1+i]<1700)<<(3*i+1) | (rcData[AUX1+i]>1700)<<(3*i+2);
-    #endif
+    //#endif
 
     for(i=0;i<CHECKBOXITEMS;i++)
       rcOptions[i] = (auxState & conf.activate[i])>0;
 
     // note: if FAILSAFE is disable, failsafeCnt > 5*FAILSAFE_DELAY is always false
     #if ACC
-      if ( rcOptions[BOXANGLE] || (failsafeCnt > 5*FAILSAFE_DELAY) ) { 
-        // bumpless transfer to Level mode
-        if (!f.ANGLE_MODE) {
-          errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
-          f.ANGLE_MODE = 1;
-        }  
-      } else {
-        if(f.ANGLE_MODE){
-          errorGyroI[ROLL] = 0; errorGyroI[PITCH] = 0;
-        }
-        f.ANGLE_MODE = 0;
-      }
+      // @Change
+      // if ( rcOptions[BOXANGLE] || (failsafeCnt > 5*FAILSAFE_DELAY) ) { 
+      //   // bumpless transfer to Level mode
+      //   if (!f.ANGLE_MODE) {
+      //     errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
+      //     f.ANGLE_MODE = 1;
+      //   }  
+      // } else {
+      //   if(f.ANGLE_MODE){
+      //     errorGyroI[ROLL] = 0; errorGyroI[PITCH] = 0;
+      //   }
+      //   f.ANGLE_MODE = 0;
+      // }
       //@Change
       rcOptions[BOXHORIZON] = 1;
       if ( rcOptions[BOXHORIZON] ) {
@@ -1144,6 +1147,8 @@ void loop () {
       }
     #endif
 
+    /*
+    @Change
     #if GPS
     // This handles the three rcOptions boxes 
     // unlike other parts of the multiwii code, it looks for changes and not based on flag settings
@@ -1237,6 +1242,7 @@ void loop () {
     }
 
     #endif //GPS
+    */
 
     #if defined(FIXEDWING) || defined(HELICOPTER)
       if (rcOptions[BOXPASSTHRU]) {f.PASSTHRU_MODE = 1;}
@@ -1248,51 +1254,28 @@ void loop () {
     switch (taskOrder) {
       case 0:
         taskOrder++;
-        #if MAG
-          if (Mag_getADC() != 0) break; // 320 µs
-        #endif
+        if (Mag_getADC() != 0) break; // 320 µs
       case 1:
         taskOrder++;
-        #if BARO
-          if (Baro_update() != 0) break; // for MS baro: I2C set and get: 220 us  -  presure and temperature computation 160 us
-        #endif
+        if (Baro_update() != 0) break; // for MS baro: I2C set and get: 220 us  -  presure and temperature computation 160 us
       case 2:
-        taskOrder++;
-        #if BARO
-          if (getEstimatedAltitude() != 0) break; // 280 us
-        #endif    
-      case 3:
-        taskOrder++;
-        #if GPS
-          if (GPS_Compute() != 0) break;  // performs computation on new frame only if present
-          #if defined(I2C_GPS)
-          if (GPS_NewData() != 0) break;  // 160 us with no new data / much more with new data 
-          #endif
-        #endif
-      case 4:
         taskOrder=0;
-        #if SONAR
-          Sonar_update(); //debug[2] = sonarAlt;
-        #endif
-        #ifdef LANDING_LIGHTS_DDR
-          auto_switch_landing_lights();
-        #endif
-        #ifdef VARIOMETER
-          if (f.VARIO_MODE) vario_signaling();
-        #endif
-        break;
+        if (getEstimatedAltitude() != 0) break; // 280 us
     }
   }
- 
-  while(1) {
-    currentTime = micros();
-    cycleTime = currentTime - previousTime;
-    #if defined(LOOP_TIME)
-      if (cycleTime >= LOOP_TIME) break;
-    #else
-      break;  
-    #endif
-  }
+  
+  //@Change
+  currentTime = micros();
+  cycleTime = currentTime - previousTime;
+  // while(1) {
+  //   currentTime = micros();
+  //   cycleTime = currentTime - previousTime;
+  //   #if defined(LOOP_TIME)
+  //     if (cycleTime >= LOOP_TIME) break;
+  //   #else
+  //     break;  
+  //   #endif
+  // }
   previousTime = currentTime;
 
   computeIMU();
@@ -1300,33 +1283,35 @@ void loop () {
   //***********************************
   //**** Experimental FlightModes *****
   //***********************************
-  #if defined(ACROTRAINER_MODE)
-  if(f.ANGLE_MODE){
-    if (abs(rcCommand[ROLL]) + abs(rcCommand[PITCH]) >= ACROTRAINER_MODE ) {
-      f.ANGLE_MODE=0;
-      f.HORIZON_MODE=0;
-      f.MAG_MODE=0;
-      f.BARO_MODE=0;
-      GPS_mode = GPS_MODE_NONE;
-      }
-    }
-  #endif
+  // @Change
+  // #if defined(ACROTRAINER_MODE)
+  // if(f.ANGLE_MODE){
+  //   if (abs(rcCommand[ROLL]) + abs(rcCommand[PITCH]) >= ACROTRAINER_MODE ) {
+  //     f.ANGLE_MODE=0;
+  //     f.HORIZON_MODE=0;
+  //     f.MAG_MODE=0;
+  //     f.BARO_MODE=0;
+  //     GPS_mode = GPS_MODE_NONE;
+  //     }
+  //   }
+  // #endif
 
   //*********************************** 
   // THROTTLE sticks during mission and RTH
-  #if GPS
-  if (GPS_conf.ignore_throttle == 1) {
-    if (f.GPS_mode == GPS_MODE_NAV || f.GPS_mode == GPS_MODE_RTH) {
-      //rcCommand[ROLL] = 0;
-      //rcCommand[PITCH] = 0;
-      //rcCommand[YAW] = 0;
-      f.THROTTLE_IGNORED = 1;
-    } else 
-      f.THROTTLE_IGNORED = 0;
-  }
+  // @Change
+  // #if GPS
+  // if (GPS_conf.ignore_throttle == 1) {
+  //   if (f.GPS_mode == GPS_MODE_NAV || f.GPS_mode == GPS_MODE_RTH) {
+  //     //rcCommand[ROLL] = 0;
+  //     //rcCommand[PITCH] = 0;
+  //     //rcCommand[YAW] = 0;
+  //     f.THROTTLE_IGNORED = 1;
+  //   } else 
+  //     f.THROTTLE_IGNORED = 0;
+  // }
 
-  //Heading manipulation TODO: Do heading manipulation 
-  #endif
+  // //Heading manipulation TODO: Do heading manipulation 
+  // #endif
 
   if (abs(rcCommand[YAW]) <70 && f.MAG_MODE) {
     int16_t dif = att.heading - magHold;
@@ -1377,27 +1362,28 @@ void loop () {
   }
   #endif
 
-  #if GPS
-  //TODO: split cos_yaw calculations into two phases (X and Y)
-  if (( f.GPS_mode != GPS_MODE_NONE ) && f.GPS_FIX_HOME ) {
-    float sin_yaw_y = sin(att.heading*0.0174532925f);
-    float cos_yaw_x = cos(att.heading*0.0174532925f);
-    GPS_angle[ROLL]   = (nav[LON]*cos_yaw_x - nav[LAT]*sin_yaw_y) /10;
-    GPS_angle[PITCH]  = (nav[LON]*sin_yaw_y + nav[LAT]*cos_yaw_x) /10;
-    } else {
-      GPS_angle[ROLL]  = 0;
-      GPS_angle[PITCH] = 0;
-    }
+  //@Change
+  // #if GPS
+  // //TODO: split cos_yaw calculations into two phases (X and Y)
+  // if (( f.GPS_mode != GPS_MODE_NONE ) && f.GPS_FIX_HOME ) {
+  //   float sin_yaw_y = sin(att.heading*0.0174532925f);
+  //   float cos_yaw_x = cos(att.heading*0.0174532925f);
+  //   GPS_angle[ROLL]   = (nav[LON]*cos_yaw_x - nav[LAT]*sin_yaw_y) /10;
+  //   GPS_angle[PITCH]  = (nav[LON]*sin_yaw_y + nav[LAT]*cos_yaw_x) /10;
+  //   } else {
+  //     GPS_angle[ROLL]  = 0;
+  //     GPS_angle[PITCH] = 0;
+  //   }
 
-  //Used to communicate back nav angles to the GPS simulator (for HIL testing)
-  #if defined(GPS_SIMULATOR)
-    SerialWrite(2,0xa5);
-    SerialWrite16(2,nav[LAT]+rcCommand[PITCH]);
-    SerialWrite16(2,nav[LON]+rcCommand[ROLL]);
-    SerialWrite16(2,(nav[LAT]+rcCommand[PITCH])-(nav[LON]+rcCommand[ROLL])); //check
-  #endif
+  // //Used to communicate back nav angles to the GPS simulator (for HIL testing)
+  // #if defined(GPS_SIMULATOR)
+  //   SerialWrite(2,0xa5);
+  //   SerialWrite16(2,nav[LAT]+rcCommand[PITCH]);
+  //   SerialWrite16(2,nav[LON]+rcCommand[ROLL]);
+  //   SerialWrite16(2,(nav[LAT]+rcCommand[PITCH])-(nav[LON]+rcCommand[ROLL])); //check
+  // #endif
 
-  #endif //GPS
+  // #endif //GPS
 
   //**** PITCH & ROLL & YAW PID ****
   #if PID_CONTROLLER == 1 // evolved oldschool
@@ -1464,6 +1450,8 @@ void loop () {
   
   axisPID[YAW] =  PTerm + ITerm;
   
+  /*
+  @Change
   #elif PID_CONTROLLER == 2 // alexK
   #define GYRO_I_MAX 256
   #define ACC_I_MAX 256
@@ -1528,6 +1516,7 @@ void loop () {
     //-----calculate total PID output
     axisPID[axis] =  PTerm + ITerm + DTerm;
   }
+  */
   #else
     #error "*** you must set PID_CONTROLLER to one existing implementation"
   #endif
