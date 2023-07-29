@@ -1,2 +1,2 @@
 # DroneTime
-Attempting to create a drone that flies itself
+Creating a drone that flies itself
